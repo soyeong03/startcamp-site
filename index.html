@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="ko" class="scroll-smooth">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KIM SO YEONG - Portfolio</title>
   
-  <!-- Tailwind CSS & Pretendard 폰트 불러오기 (script 태그로 로드하여 스타일 깨짐 해결) -->
+  <!-- Tailwind CSS & Pretendard 폰트 불러오기 -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
   
@@ -14,13 +14,13 @@
        1. 디자인 토큰 및 변수 설정 (Theme)
        ---------------------------------- */
     :root {
-      --bg-main: #0A0F1D;         /* 깊은 몰입감의 딥 네이비 블랙 */
-      --bg-card: #141A2E;         /* 은은하게 밝은 차콜 네이비 카드 배경 */
-      --color-primary: #00FFCC;    /* 영롱한 에메랄드 민트 */
-      --color-secondary: #00E5FF;  /* 시안 블루 */
+      --bg-main: #060913;         /* 더 깊고 몰입도 높은 블랙 블루 */
+      --bg-card: rgba(20, 26, 46, 0.6); /* 반투명 글래스모피즘 카드 배경 */
+      --color-primary: #00FFCC;    /* 젤다&수영장을 연상시키는 영롱한 에메랄드 민트 */
+      --color-secondary: #00E5FF;  /* 보조 포인트 컬러 (시안 블루) */
       --color-neon-glow: rgba(0, 255, 204, 0.2);
       
-      --text-main: #F1F5F9;        /* 밝은 그레이시 화이트 */
+      --text-main: #F8FAFC;        /* 밝고 선명한 화이트 그레이 */
       --text-muted: #94A3B8;       /* 차분한 슬레이트 그레이 */
       --font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
       --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -35,10 +35,6 @@
       padding: 0;
     }
 
-    html {
-      scroll-padding-top: 5rem;
-    }
-
     body {
       background-color: var(--bg-main);
       color: var(--text-main);
@@ -46,7 +42,34 @@
       line-height: 1.6;
       word-break: keep-all;
       overflow-x: hidden;
-      padding-top: 5rem; /* 고정 네비게이션 바 높이 확보 */
+      padding-top: 4rem; /* 상단 네비 바 높이 확보 */
+      position: relative;
+    }
+
+    /* 몽환적인 백그라운드 빛무리 (오로라 메쉬 효과) */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -10%;
+      left: -10%;
+      width: 120%;
+      height: 120%;
+      background: 
+        radial-gradient(circle at 15% 20%, rgba(0, 255, 204, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(0, 229, 255, 0.08) 0%, transparent 45%);
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    /* 미세 격자망 테마 코팅 패턴 */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 24px 24px;
+      z-index: -1;
+      pointer-events: none;
     }
 
     a {
@@ -90,7 +113,7 @@
     }
 
     /* ----------------------------------
-       3. 네비게이션 필수 스타일링
+       3. 네비게이션 애니메이션 및 활성화 링크
        ---------------------------------- */
     .nav-link {
       position: relative;
@@ -99,6 +122,7 @@
       transition: var(--transition-smooth);
     }
 
+    /* 활성 메뉴 바닥 강조 선 */
     .nav-link::after {
       content: '';
       position: absolute;
@@ -120,7 +144,7 @@
     }
 
     .nav-link.active::after {
-      width: 100%; /* 활성화 페이지 밑줄 전체 노출 */
+      width: 100%;
     }
 
     .mobile-nav-link.active {
@@ -131,7 +155,7 @@
     }
 
     /* ----------------------------------
-       4. 타이틀 및 섹션 개별 효과
+       4. 공통 애니메이션 효과
        ---------------------------------- */
     @keyframes fadeInUp {
       from {
@@ -144,9 +168,22 @@
       }
     }
 
+    @keyframes pulseGlow {
+      0%, 100% {
+        box-shadow: 0 0 15px rgba(0, 255, 204, 0.15);
+      }
+      50% {
+        box-shadow: 0 0 25px rgba(0, 255, 204, 0.4);
+      }
+    }
+
+    .animate-fadeInUp {
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* 섹션 공통 */
     section {
       padding: 60px 0;
-      animation: fadeInUp 0.8s ease-out forwards;
     }
 
     .section-title {
@@ -174,152 +211,81 @@
     }
 
     /* ----------------------------------
-       5. 프로필 & MBTI 분석창 섹션 (가로/세로 배치 밸런스 조정)
+       5. 글래스모피즘 카드 공통 디자인
        ---------------------------------- */
-    .profile-grid {
-      display: flex;
-      flex-direction: column; 
-      gap: 32px;
-      align-items: stretch;
-    }
-
-    /* 기본 정보 카드 */
-    .profile-card {
-      background-color: var(--bg-card);
+    .glass-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 20px;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
+      border-radius: 24px;
+      transition: var(--transition-smooth);
     }
 
-    .profile-card::before {
+    .glass-card:hover {
+      border-color: rgba(0, 255, 204, 0.2);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 255, 204, 0.06);
+    }
+
+    /* ----------------------------------
+       6. 프로필 이미지 대용 글로우 서클
+       ---------------------------------- */
+    .glow-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10B981, #06B6D4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 800;
+      font-size: 2.2rem;
+      color: #FFFFFF;
+      position: relative;
+      animation: pulseGlow 4s infinite ease-in-out;
+    }
+
+    .glow-avatar::after {
       content: '';
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(0, 255, 204, 0.03) 0%, transparent 60%);
-      pointer-events: none;
+      inset: -4px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      z-index: -1;
+      opacity: 0.5;
     }
 
-    .info-tag {
-      display: inline-block;
-      padding: 4px 12px;
-      background: rgba(0, 255, 204, 0.1);
-      border: 1px solid rgba(0, 255, 204, 0.2);
-      color: var(--color-primary);
-      font-size: 0.85rem;
-      border-radius: 30px;
-      font-weight: 600;
-      margin-bottom: 20px;
-      width: fit-content;
+    /* ----------------------------------
+       7. 토스트 알림 컴포넌트
+       ---------------------------------- */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
     }
 
-    .info-title {
-      font-size: 1.8rem;
-      font-weight: 800;
-      margin-bottom: 16px;
+    .toast-msg {
+      background: rgba(20, 26, 46, 0.95);
+      border: 1px solid var(--color-primary);
+      box-shadow: 0 10px 30px rgba(0, 255, 204, 0.2);
+      padding: 14px 24px;
+      border-radius: 16px;
       color: #FFFFFF;
-    }
-
-    .info-item-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      color: var(--text-muted);
-    }
-
-    .info-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 1.05rem;
-    }
-
-    .info-item strong {
-      color: var(--text-main);
       font-weight: 600;
-      min-width: 80px;
-    }
-
-    /* MBTI 게이지 바 카드 */
-    .mbti-card {
-      background-color: var(--bg-card);
-      border: 1px solid rgba(0, 255, 204, 0.1);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      border-radius: 20px;
-      padding: 35px 40px;
+      font-size: 0.95rem;
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .mbti-header {
-      display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      gap: 10px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: var(--transition-smooth);
     }
 
-    .mbti-type-badge {
-      font-size: 1.6rem;
-      font-weight: 900;
-      color: var(--color-primary);
-      text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
-    }
-
-    .mbti-explain {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      text-align: right;
-    }
-
-    .gauge-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr; /* 2열 배치 */
-      gap: 20px;
-    }
-
-    @media (max-width: 640px) {
-      .gauge-container {
-        grid-template-columns: 1fr; /* 모바일 대응 1열 변환 */
-      }
-    }
-
-    .gauge-item {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .gauge-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-
-    .gauge-bg {
-      width: 100%;
-      height: 10px;
-      background: #1E293B;
-      border-radius: 5px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .gauge-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
-      border-radius: 5px;
-      width: 0%; 
-      transition: width 1.5s cubic-bezier(0.1, 0.8, 0.2, 1);
-      box-shadow: 0 0 8px var(--color-neon-glow);
+    .toast-msg.show {
+      transform: translateY(0);
+      opacity: 1;
     }
   </style>
 </head>
@@ -328,7 +294,6 @@
   <!-- ======================================================== -->
   <!-- [공통] 상단 하이브리드 네비게이션 바 컴포넌트 (복사용) -->
   <!-- ======================================================== -->
-  <!-- 현재 페이지인 "Intro" 링크에 active 클래스를 부여했습니다. -->
   <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300" id="navbar" style="background-color: rgba(10, 15, 29, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
     <div class="container flex justify-between items-center h-16">
       <!-- 로고 명칭 -->
@@ -362,55 +327,95 @@
       </ul>
     </div>
   </nav>
+
   <!-- ======================================================== -->
-
-  <!-- 헤더 서브 타이틀 -->
-  <header class="pt-16 pb-6 text-center">
-    <div class="container">
-      <p class="text-[#94A3B8] text-sm tracking-wider font-light uppercase">Introductory Profile</p>
-    </div>
-  </header>
-
-  <main class="container">
+  <!-- [본문] 메인 첫 화면 (Intro) 인트로덕션 뷰 -->
+  <!-- ======================================================== -->
+  <main class="container py-8">
     
-    <!-- 프로필 및 MBTI 섹션 -->
-    <section id="profile" class="py-6">
-      <div class="profile-grid">
-        <!-- 기본 인적사항 (가로 100% 확장 구조) -->
-        <div class="profile-card">
-          <span class="info-tag">INTRODUCE</span>
-          <h2 class="info-title">김소영</h2>
-          <div class="info-item-list">
-            <div class="info-item">
-              <strong>나이</strong>
-              <span>24세 (2003년생)</span>
+    <!-- 비주얼 헤더 섹션 -->
+    <header class="text-center py-12 animate-fadeInUp">
+      <h1 class="text-4xl md:text-5xl font-black tracking-widest text-white mb-3">
+        KIM SO YEONG
+      </h1>
+      <p class="text-base text-cyan-400 font-medium tracking-wider uppercase mb-1">
+        시스템 안정성을 끝까지 책임지는 개발자
+      </p>
+      <div class="h-1 w-20 bg-gradient-to-r from-[#00FFCC] to-[#00E5FF] mx-auto rounded"></div>
+    </header>
+
+    <!-- 프로필 세션 영역 -->
+    <section id="profile" class="space-y-8 animate-fadeInUp" style="animation-delay: 0.1s;">
+      <div class="flex flex-col gap-8">
+        
+        <!-- INTRODUCE 가로형 카드 (불필요한 게이지 대시보드 제거 버전) -->
+        <div class="glass-card p-8 md:p-10 relative overflow-hidden">
+          <!-- 내부 앰비언트 글로우 데코 -->
+          <div class="absolute -right-20 -top-20 w-60 h-60 bg-[#00FFCC]/5 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div class="flex flex-col md:flex-row items-center gap-8 relative z-10">
+            <!-- 글로우 이니셜 아바타 -->
+            <div class="glow-avatar flex-shrink-0">
+              SY
             </div>
-            <div class="info-item">
-              <strong>MBTI</strong>
-              <span style="color: var(--color-primary); font-weight: 700;">INTJ</span>
-            </div>
-            <div class="info-item">
-              <strong>관심 분야</strong>
-              <span>서버 관리자, 모빌리티 분야, 백엔드 서비스 개발</span>
+            
+            <!-- 인물 명세 디테일 -->
+            <div class="flex-grow w-full text-center md:text-left">
+              <span class="inline-block px-3 py-1 bg-[#00FFCC]/10 border border-[#00FFCC]/25 text-[#00FFCC] text-xs font-semibold rounded-full uppercase tracking-wider mb-3">
+                Core Profile
+              </span>
+              <h2 class="text-3xl font-bold text-white mb-4">김소영</h2>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-[#94A3B8]">
+                <div class="flex items-center gap-3 justify-center md:justify-start">
+                  <span class="text-lg">🎂</span>
+                  <span><strong>나이:</strong> 24세 (2003년생)</span>
+                </div>
+                <div class="flex items-center gap-3 justify-center md:justify-start">
+                  <span class="text-lg">🧠</span>
+                  <span><strong>성향:</strong> INTJ</span>
+                </div>
+                <div class="flex items-center gap-3 justify-center md:justify-start text-left">
+                  <span class="text-lg flex-shrink-0">🎯</span>
+                  <span><strong>관심분야:</strong> 서버 관리자, 모빌리티 분야, 백엔드 서비스 개발</span>
+                </div>
+                <div class="flex items-center gap-3 justify-center md:justify-start">
+                  <span class="text-lg">✉️</span>
+                  <span class="flex items-center gap-2">
+                    <strong>연락처:</strong> rlathdudabc@gmail.com
+                    <button onclick="copyToClipboard('info@example.com')" class="text-xs text-[#00FFCC] hover:underline" aria-label="이메일 복사">
+                      [복사]
+                    </button>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
 
       </div>
     </section>
 
   </main>
 
+  <!-- 글로벌 토스트 마운터 -->
+  <div class="toast-container">
+    <div class="toast-msg" id="clipboardToast">
+      <span>✨ 이메일 주소가 복사되었습니다!</span>
+    </div>
+  </div>
+
   <!-- 푸터 -->
-  <footer class="mt-20">
+  <footer>
     <div class="container">
       <p>© 2026 <span class="footer-highlight">KIM SO YEONG</span>. All rights reserved.</p>
       <p style="font-size: 0.8rem; opacity: 0.5;">Designed with deep navy and radiant emerald mint</p>
     </div>
   </footer>
 
-  <!-- 자바스크립트 제어 (MBTI 로딩 및 햄버거 토글) -->
+  <!-- ----------------------------------
+       자바스크립트 제어 (인터랙션 및 모바일 메뉴 연동)
+       ---------------------------------- -->
   <script>
     /* A. 모바일 햄버거 메뉴 토글 제어 */
     const menuBtn = document.getElementById('menu-btn');
@@ -430,16 +435,22 @@
       });
     }
 
-    /* B. 페이지 로딩 후 MBTI 게이지 바가 스르륵 차오르는 애니메이션 */
-    window.addEventListener('DOMContentLoaded', () => {
-      const gaugeFills = document.querySelectorAll('.gauge-fill');
+    /* B. 클립보드 복사 유틸리티 & 토스트 알림 작동 */
+    function copyToClipboard(text) {
+      const tempTextArea = document.createElement('textarea');
+      tempTextArea.value = text;
+      document.body.appendChild(tempTextArea);
+      tempTextArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempTextArea);
+
+      // 토스트 작동
+      const toast = document.getElementById('clipboardToast');
+      toast.classList.add('show');
       setTimeout(() => {
-        gaugeFills.forEach(fill => {
-          const targetWidth = fill.getAttribute('data-target');
-          fill.style.width = targetWidth;
-        });
-      }, 250);
-    });
+        toast.classList.remove('show');
+      }, 2500);
+    }
   </script>
 </body>
 </html>
