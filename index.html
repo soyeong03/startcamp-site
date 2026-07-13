@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KIM SO YEONG - Portfolio</title>
   
-  <!-- Pretendard Font & Google Fonts 구동 -->
-  <link rel="stylesheet" as="style" crossorigin href="https://cdn.tailwindcss.com" />
+  <!-- Tailwind CSS & Pretendard 폰트 불러오기 (script 태그로 로드하여 스타일 깨짐 해결) -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
   
   <style>
@@ -16,8 +16,8 @@
     :root {
       --bg-main: #0A0F1D;         /* 깊은 몰입감의 딥 네이비 블랙 */
       --bg-card: #141A2E;         /* 은은하게 밝은 차콜 네이비 카드 배경 */
-      --color-primary: #00FFCC;    /* 젤다&수영장을 연상시키는 영롱한 에메랄드 민트 */
-      --color-secondary: #00E5FF;  /* 보조 포인트 컬러 (시안 블루) */
+      --color-primary: #00FFCC;    /* 영롱한 에메랄드 민트 */
+      --color-secondary: #00E5FF;  /* 시안 블루 */
       --color-neon-glow: rgba(0, 255, 204, 0.2);
       
       --text-main: #F1F5F9;        /* 밝은 그레이시 화이트 */
@@ -35,6 +35,10 @@
       padding: 0;
     }
 
+    html {
+      scroll-padding-top: 5rem;
+    }
+
     body {
       background-color: var(--bg-main);
       color: var(--text-main);
@@ -42,11 +46,19 @@
       line-height: 1.6;
       word-break: keep-all;
       overflow-x: hidden;
+      padding-top: 5rem; /* 고정 네비게이션 바 높이 확보 */
     }
 
     a {
       color: inherit;
       text-decoration: none;
+    }
+
+    /* 기본 리셋에 ul 점 제거 및 패딩 초기화 추가 (더욱 안전하게 방어) */
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
     }
 
     button {
@@ -78,7 +90,48 @@
     }
 
     /* ----------------------------------
-       3. 컴포넌트 & 애니메이션 효과
+       3. 네비게이션 필수 스타일링
+       ---------------------------------- */
+    .nav-link {
+      position: relative;
+      display: flex;
+      align-items: center;
+      transition: var(--transition-smooth);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background-color: var(--color-primary);
+      transition: var(--transition-smooth);
+    }
+
+    .nav-link:hover {
+      color: var(--color-primary) !important;
+    }
+
+    .nav-link.active {
+      color: var(--color-primary) !important;
+      font-weight: 700;
+    }
+
+    .nav-link.active::after {
+      width: 100%; /* 활성화 페이지 밑줄 전체 노출 */
+    }
+
+    .mobile-nav-link.active {
+      color: var(--color-primary) !important;
+      border-left: 3px solid var(--color-primary);
+      padding-left: 12px;
+      font-weight: 700;
+    }
+
+    /* ----------------------------------
+       4. 타이틀 및 섹션 개별 효과
        ---------------------------------- */
     @keyframes fadeInUp {
       from {
@@ -91,7 +144,6 @@
       }
     }
 
-    /* 섹션 공통 */
     section {
       padding: 60px 0;
       animation: fadeInUp 0.8s ease-out forwards;
@@ -122,37 +174,11 @@
     }
 
     /* ----------------------------------
-       4. 헤더 (Header) 섹션
-       ---------------------------------- */
-    header {
-      background: linear-gradient(180deg, rgba(10, 15, 29, 0.9) 0%, rgba(10, 15, 29, 0) 100%);
-      padding: 60px 0 20px 0;
-      text-align: center;
-    }
-
-    .header-logo {
-      font-size: 2.5rem;
-      font-weight: 900;
-      letter-spacing: 0.15em;
-      background: linear-gradient(135deg, #FFFFFF 30%, var(--color-primary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
-    }
-
-    .header-sub {
-      color: var(--text-muted);
-      font-size: 1rem;
-      letter-spacing: 0.05em;
-      font-weight: 300;
-    }
-
-    /* ----------------------------------
-       5. 프로필 & MBTI 분석창 섹션 (가로 배치로 전면 수정)
+       5. 프로필 & MBTI 분석창 섹션 (가로/세로 배치 밸런스 조정)
        ---------------------------------- */
     .profile-grid {
       display: flex;
-      flex-direction: column; /* 세로 정렬로 변경하여 카드가 가로로 길게 배치되도록 설정 */
+      flex-direction: column; 
       gap: 32px;
       align-items: stretch;
     }
@@ -255,13 +281,13 @@
 
     .gauge-container {
       display: grid;
-      grid-template-columns: 1fr 1fr; /* 가로로 넓어지므로 게이지를 2열로 배치 */
+      grid-template-columns: 1fr 1fr; /* 2열 배치 */
       gap: 20px;
     }
 
     @media (max-width: 640px) {
       .gauge-container {
-        grid-template-columns: 1fr; /* 모바일에서는 다시 1열로 좁혀짐 */
+        grid-template-columns: 1fr; /* 모바일 대응 1열 변환 */
       }
     }
 
@@ -295,297 +321,62 @@
       transition: width 1.5s cubic-bezier(0.1, 0.8, 0.2, 1);
       box-shadow: 0 0 8px var(--color-neon-glow);
     }
-
-    /* ----------------------------------
-       6. 기술 스택 (Tech Stack) 섹션
-       ---------------------------------- */
-    .tech-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .tech-tag-card {
-      background-color: var(--bg-card);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 16px;
-      padding: 30px;
-      text-align: center;
-      cursor: pointer;
-      transition: var(--transition-smooth);
-      position: relative;
-    }
-
-    .tech-tag-card:hover {
-      transform: translateY(-8px);
-      border-color: var(--color-primary);
-      box-shadow: 0 10px 25px rgba(0, 255, 204, 0.15);
-    }
-
-    .tech-icon {
-      font-size: 2.2rem;
-      margin-bottom: 16px;
-      display: inline-block;
-      transition: var(--transition-smooth);
-    }
-
-    .tech-tag-card:hover .tech-icon {
-      transform: scale(1.15) rotate(5deg);
-    }
-
-    .tech-name {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #FFFFFF;
-      margin-bottom: 8px;
-    }
-
-    .tech-desc {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      word-break: keep-all;
-    }
-
-    /* ----------------------------------
-       7. 취미 (Hobbies) 섹션 & 인터랙션
-       ---------------------------------- */
-    .hobby-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .hobby-card {
-      background-color: var(--bg-card);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 20px;
-      padding: 35px 24px;
-      text-align: center;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: var(--transition-smooth);
-    }
-
-    .hobby-card::after {
-      content: '자세히 보기 ➔';
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%) translateY(10px);
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--color-primary);
-      opacity: 0;
-      transition: var(--transition-smooth);
-    }
-
-    .hobby-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(0, 255, 204, 0.3);
-      background: linear-gradient(180deg, var(--bg-card) 0%, rgba(0, 255, 204, 0.04) 100%);
-      padding-bottom: 45px; 
-    }
-
-    .hobby-card:hover::after {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .hobby-emoji {
-      font-size: 3rem;
-      margin-bottom: 16px;
-      display: inline-block;
-      transition: transform 0.3s ease;
-    }
-
-    .hobby-card:hover .hobby-emoji {
-      transform: scale(1.2);
-    }
-
-    .hobby-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #FFFFFF;
-      margin-bottom: 10px;
-    }
-
-    .hobby-short {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    /* ----------------------------------
-       8. 팝업창 (모달, Modal) 스타일
-       ---------------------------------- */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(5, 8, 16, 0.85);
-      backdrop-filter: blur(8px);
-      z-index: 1000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-
-    .modal-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .modal-window {
-      background-color: var(--bg-card);
-      border: 1px solid rgba(0, 255, 204, 0.2);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 
-                  0 0 30px rgba(0, 255, 204, 0.05);
-      border-radius: 24px;
-      width: 90%;
-      max-width: 550px;
-      padding: 40px;
-      position: relative;
-      transform: scale(0.9) translateY(20px);
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      text-align: center;
-    }
-
-    .modal-overlay.active .modal-window {
-      transform: scale(1) translateY(0);
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.05);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: var(--text-muted);
-      font-size: 1.2rem;
-      transition: var(--transition-smooth);
-    }
-
-    .modal-close:hover {
-      background: rgba(0, 255, 204, 0.2);
-      color: var(--color-primary);
-      transform: rotate(90deg);
-    }
-
-    .modal-emoji {
-      font-size: 4rem;
-      margin-bottom: 20px;
-    }
-
-    .modal-title {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: #FFFFFF;
-      margin-bottom: 16px;
-    }
-
-    .modal-content-text {
-      color: #E2E8F0;
-      font-size: 1.05rem;
-      line-height: 1.7;
-      margin-bottom: 24px;
-      text-align: left; /* 긴 글은 왼쪽 정렬이 훨씬 읽기 쉬움 */
-    }
-
-    .modal-deco-badge {
-      display: inline-block;
-      padding: 6px 14px;
-      background: rgba(0, 255, 204, 0.08);
-      border-radius: 30px;
-      font-size: 0.85rem;
-      color: var(--color-primary);
-      font-weight: 600;
-      border: 1px dashed rgba(0, 255, 204, 0.3);
-    }
-
-    /* ----------------------------------
-       9. 푸터 (Footer) 섹션
-       ---------------------------------- */
-    footer {
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 40px 0;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    footer p {
-      margin-bottom: 8px;
-    }
-
-    .footer-highlight {
-      color: var(--color-primary);
-      font-weight: 600;
-    }
-
-    /* ----------------------------------
-       10. 모바일 반응형 디자인
-       ---------------------------------- */
-    @media (max-width: 900px) {
-      .tech-grid {
-        grid-template-columns: 1fr; /* 1열 변환 */
-        gap: 16px;
-      }
-
-      .hobby-grid {
-        grid-template-columns: 1fr; /* 1열 변환 */
-        gap: 16px;
-      }
-
-      section {
-        padding: 50px 0;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .header-logo {
-        font-size: 2rem;
-      }
-      
-      .profile-card, .mbti-card, .modal-window {
-        padding: 24px;
-      }
-
-      .info-title {
-        font-size: 1.5rem;
-      }
-
-      .info-item {
-        font-size: 0.95rem;
-      }
-    }
   </style>
 </head>
 <body>
 
-  <!-- 헤더 섹션 -->
-  <header>
+  <!-- ======================================================== -->
+  <!-- [공통] 상단 하이브리드 네비게이션 바 컴포넌트 (복사용) -->
+  <!-- ======================================================== -->
+  <!-- 현재 페이지인 "Intro" 링크에 active 클래스를 부여했습니다. -->
+  <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300" id="navbar" style="background-color: rgba(10, 15, 29, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+    <div class="container flex justify-between items-center h-16">
+      <!-- 로고 명칭 -->
+      <a href="index.html" class="text-lg font-bold tracking-widest text-white hover:text-[#00FFCC] transition-colors">
+        KIM SO YEONG
+      </a>
+      
+      <!-- 데스크톱 네비게이션 메뉴 (md 이상 노출) -->
+      <ul class="hidden md:flex space-x-8 text-sm font-medium h-full items-center">
+        <li><a href="index.html" class="nav-link active text-[#94A3B8] hover:text-[#00FFCC] py-2">Intro</a></li>
+        <li><a href="tech.html" class="nav-link text-[#94A3B8] hover:text-[#00FFCC] py-2">Technical Skills</a></li>
+        <li><a href="hobbies.html" class="nav-link text-[#94A3B8] hover:text-[#00FFCC] py-2">My Hobbies</a></li>
+        <li><a href="projects.html" class="nav-link text-[#94A3B8] hover:text-[#00FFCC] py-2">Featured Projects</a></li>
+      </ul>
+
+      <!-- 모바일 햄버거 메뉴 토글 버튼 -->
+      <button id="menu-btn" class="md:hidden flex flex-col justify-center items-center w-8 h-8 space-y-1.5 focus:outline-none" aria-label="메뉴 열기">
+        <span class="block w-6 h-0.5 bg-white transition-transform duration-300" id="line1"></span>
+        <span class="block w-6 h-0.5 bg-white transition-opacity duration-300" id="line2"></span>
+        <span class="block w-6 h-0.5 bg-white transition-transform duration-300" id="line3"></span>
+      </button>
+    </div>
+
+    <!-- 모바일 드롭다운 메뉴 (기본값 숨김) -->
+    <div id="mobile-menu" class="hidden md:hidden bg-[#141A2E] border-t border-white/5 transition-all duration-300">
+      <ul class="px-6 py-4 space-y-4 text-sm font-medium">
+        <li><a href="index.html" class="mobile-nav-link active block text-[#94A3B8] hover:text-[#00FFCC] py-1">Intro</a></li>
+        <li><a href="tech.html" class="mobile-nav-link block text-[#94A3B8] hover:text-[#00FFCC] py-1">Technical Skills</a></li>
+        <li><a href="hobbies.html" class="mobile-nav-link block text-[#94A3B8] hover:text-[#00FFCC] py-1">My Hobbies</a></li>
+        <li><a href="projects.html" class="mobile-nav-link block text-[#94A3B8] hover:text-[#00FFCC] py-1">Featured Projects</a></li>
+      </ul>
+    </div>
+  </nav>
+  <!-- ======================================================== -->
+
+  <!-- 헤더 서브 타이틀 -->
+  <header class="pt-16 pb-6 text-center">
     <div class="container">
-      <h1 class="header-logo">KIM SO YEONG</h1>
-      <p class="header-sub">시스템 안정성을 끝까지 책임지는 개발자</p>
+      <p class="text-[#94A3B8] text-sm tracking-wider font-light uppercase">Introductory Profile</p>
     </div>
   </header>
 
   <main class="container">
     
-    <!-- 프로필 및 MBTI 섹션 (INTRODUCE 가로 배치 완료) -->
-    <section id="profile">
+    <!-- 프로필 및 MBTI 섹션 -->
+    <section id="profile" class="py-6">
       <div class="profile-grid">
-        <!-- 기본 인적사항 (가로로 길어짐) -->
+        <!-- 기본 인적사항 (가로 100% 확장 구조) -->
         <div class="profile-card">
           <span class="info-tag">INTRODUCE</span>
           <h2 class="info-title">김소영</h2>
@@ -605,92 +396,6 @@
           </div>
         </div>
 
-    <!-- 기술 스택 섹션 -->
-    <section id="tech-stack">
-      <h2 class="section-title">Technical Skills</h2>
-      <div class="tech-grid">
-        
-        <!-- Python -->
-        <div class="tech-tag-card">
-          <div class="tech-icon">🐍</div>
-          <h3 class="tech-name">Python</h3>
-          <p class="tech-desc">직관적이고 정교한 알고리즘 설계 및 대용량 분석 데이터 전처리 가공</p>
-        </div>
-
-        <!-- Java -->
-        <div class="tech-tag-card">
-          <div class="tech-icon">☕</div>
-          <h3 class="tech-name">Java</h3>
-          <p class="tech-desc">객체지향 방법론을 철저하게 적용한 고성능·안정적인 백엔드 로직 설계</p>
-        </div>
-
-        <!-- SQL -->
-        <div class="tech-tag-card">
-          <div class="tech-icon">💾</div>
-          <h3 class="tech-name">SQL</h3>
-          <p class="tech-desc">데이터 정규화 모델링 및 쿼리 옵티마이저를 다루는 튜닝 기술 확보</p>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- 취미 섹션 (핵심 인터랙션) -->
-    <section id="hobbies">
-      <h2 class="section-title">My Hobbies</h2>
-      <div class="hobby-grid">
-        
-        <!-- 취미 1: 게임 (젤다) -->
-        <div class="hobby-card" onclick="openDetailModal('game')">
-          <div class="hobby-emoji">🎮</div>
-          <h3 class="hobby-title">Game</h3>
-          <p class="hobby-short"></p>
-        </div>
-
-        <!-- 취미 2: 수영 -->
-        <div class="hobby-card" onclick="openDetailModal('swim')">
-          <div class="hobby-emoji">🏊</div>
-          <h3 class="hobby-title">Swimming</h3>
-          <p class="hobby-short"></p>
-        </div>
-
-        <!-- 취미 3: 넷플릭스 -->
-        <div class="hobby-card" onclick="openDetailModal('netflix')">
-          <div class="hobby-emoji">🎬</div>
-          <h3 class="hobby-title">Netflix</h3>
-          <p class="hobby-short"></p>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- 프로젝트 섹션 (취미 섹션 아래에 깔끔하게 추가됨 & 클릭 인터랙션 탑재!) -->
-    <section id="projects">
-      <h2 class="section-title">Featured Projects</h2>
-      <div class="tech-grid">
-        
-        <!-- 프로젝트 1 -->
-        <div class="tech-tag-card" onclick="openDetailModal('robot_proj')">
-          <div class="tech-icon">🤖</div>
-          <h3 class="tech-name">Robot Monitoring System</h3>
-          <p class="tech-desc" style="margin-bottom: 8px; font-size: 0.8rem; color: var(--color-primary); font-weight: 600;">Python / FastAPI / InfluxDB</p>
-          <p class="tech-desc">이기종 로봇을 실시간으로 모니터링하는 시스템 (클릭하여 상세 보기)</p>
-        </div>
-
-        <!-- 프로젝트 2 -->
-        <div class="tech-tag-card" onclick="openDetailModal('mobility_proj')">
-          <div class="tech-icon">🚔</div>
-          <h3 class="tech-name">Mobility Team Project</h3>
-          <p class="tech-desc" style="margin-bottom: 8px; font-size: 0.8rem; color: var(--color-primary); font-weight: 600;">ROS2 / Python</p>
-          <p class="tech-desc">센서 융합의 객체 탐지 및 회피 기능을 가지는 자율 주행 차 (클릭하여 상세 보기)</p>
-        </div>
-
-        <!-- 프로젝트 3: SQL 기반 -->
-        <div class="tech-tag-card" onclick="openDetailModal('adas_proj')">
-          <div class="tech-icon">📊</div>
-          <h3 class="tech-name">ADAS Project</h3>
-          <p class="tech-desc" style="margin-bottom: 8px; font-size: 0.8rem; color: var(--color-primary); font-weight: 600;">YOLO</p>
-          <p class="tech-desc">KITTI 2D Object Detection Database 기반 객체 탐지 모델 개발 (클릭하여 상세 보기)</p>
-        </div>
 
       </div>
     </section>
@@ -698,31 +403,34 @@
   </main>
 
   <!-- 푸터 -->
-  <footer>
+  <footer class="mt-20">
     <div class="container">
       <p>© 2026 <span class="footer-highlight">KIM SO YEONG</span>. All rights reserved.</p>
       <p style="font-size: 0.8rem; opacity: 0.5;">Designed with deep navy and radiant emerald mint</p>
     </div>
   </footer>
 
-  <!-- ----------------------------------
-       11. 통합 모달 팝업 구조
-       ---------------------------------- -->
-  <div class="modal-overlay" id="hobbyModal" onclick="closeModalOnOverlay(event)">
-    <div class="modal-window">
-      <button class="modal-close" onclick="closeHobbyModal()" aria-label="닫기">✕</button>
-      <div class="modal-emoji" id="modalEmoji">🎮</div>
-      <h3 class="modal-title" id="modalTitle">상세 정보</h3>
-      <p class="modal-content-text" id="modalContent">상세한 내용이 나타나는 공간입니다.</p>
-      <span class="modal-deco-badge" id="modalBadge">Zelda Adventurer</span>
-    </div>
-  </div>
-
-  <!-- ----------------------------------
-       12. 자바스크립트 제어 (인터랙션 통합)
-       ---------------------------------- -->
+  <!-- 자바스크립트 제어 (MBTI 로딩 및 햄버거 토글) -->
   <script>
-    /* A. 페이지 로딩 후 MBTI 게이지 바가 스르륵 차오르는 애니메이션 */
+    /* A. 모바일 햄버거 메뉴 토글 제어 */
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const line1 = document.getElementById('line1');
+    const line2 = document.getElementById('line2');
+    const line3 = document.getElementById('line3');
+
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        line1.classList.toggle('rotate-45');
+        line1.classList.toggle('translate-y-2');
+        line2.classList.toggle('opacity-0');
+        line3.classList.toggle('-rotate-45');
+        line3.classList.toggle('-translate-y-2');
+      });
+    }
+
+    /* B. 페이지 로딩 후 MBTI 게이지 바가 스르륵 차오르는 애니메이션 */
     window.addEventListener('DOMContentLoaded', () => {
       const gaugeFills = document.querySelectorAll('.gauge-fill');
       setTimeout(() => {
@@ -730,85 +438,8 @@
           const targetWidth = fill.getAttribute('data-target');
           fill.style.width = targetWidth;
         });
-      }, 200);
+      }, 250);
     });
-
-    /* B. 취미 카드 및 프로젝트 카드를 통합 제어하는 상세 팝업 데이터셋 */
-    const detailData = {
-      // 1. 취미 데이터 영역
-      game: {
-        emoji: '🎮',
-        title: 'Nintendo Switch',
-        content: "",
-        badge: '하이랄 월드의 숨은 전략가'
-      },
-      swim: {
-        emoji: '🏊',
-        title: 'Swimming',
-        content: "",
-        badge: '영법러'
-      },
-      netflix: {
-        emoji: '🎬',
-        title: 'Netflix',
-        content: "",
-        badge: '서사 분석러'
-      },
-      // 2. 신규 프로젝트 상세 데이터 영역 (클릭 시 팝업에 나타날 데이터)
-      robot_proj: {
-        emoji: '🤖',
-        title: 'Robot Monitoring System',
-        content: "연속적으로 데이터를 전송하는 9개의 이기종 로봇(Robot-arm 3개, UGV 3개, Drone 3개)을 실시간으로 모니터링하는 시스템입니다",
-        badge: 'Technical Topic: FastAPI & InfluxDB'
-      },
-      mobility_proj: {
-        emoji: '🚔',
-        title: 'Mobility Team Project',
-        content: "센서 융합의 객체 탐지 및 회피 기능을 가지는 자율 주행 차를 시뮬레이션 환경에서 구현",
-        badge: 'Technical Topic: ROS2 & Python'
-      },
-      adas_proj: {
-        emoji: '📊',
-        title: 'ADAS 기반 안전기능 구현',
-        content: "KITTI 2D Object Detection Database 기반 객체 탐지 모델 개발",
-        badge: 'Technical Topic: Yolo'
-      }
-    };
-
-    const modal = document.getElementById('hobbyModal');
-    const modalEmoji = document.getElementById('modalEmoji');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalContent = document.getElementById('modalContent');
-    const modalBadge = document.getElementById('modalBadge');
-
-    /* 통합 모달 열기 함수 */
-    function openDetailModal(key) {
-      const data = detailData[key];
-      if (!data) return;
-
-      // 모달 내부 데이터 바인딩
-      modalEmoji.textContent = data.emoji;
-      modalTitle.textContent = data.title;
-      modalContent.textContent = data.content;
-      modalBadge.textContent = data.badge;
-
-      // 모달 활성화 및 바디 스크롤 금지
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    /* 모달 닫기 함수 */
-    function closeHobbyModal() {
-      modal.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    // 모달 바깥 어두운 배경(오버레이)을 눌렀을 때만 꺼지도록 제어
-    function closeModalOnOverlay(event) {
-      if (event.target === modal) {
-        closeHobbyModal();
-      }
-    }
   </script>
 </body>
 </html>
