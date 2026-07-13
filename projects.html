@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KIM SO YEONG - Featured Projects</title>
+  
+  <!-- Tailwind CSS & Pretendard 폰트 불러오기 -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.tailwindcss.com" />
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+  
+  <style>
+    /* ----------------------------------
+       1. 디자인 토큰 및 변수 설정 (Theme)
+       ---------------------------------- */
+    :root {
+      --bg-main: #0A0F1D;         /* 깊은 몰입감의 딥 네이비 블랙 */
+      --bg-card: #141A2E;         /* 은은하게 밝은 차콜 네이비 카드 배경 */
+      --color-primary: #00FFCC;    /* 영롱한 에메랄드 민트 */
+      --color-secondary: #00E5FF;  /* 시안 블루 */
+      --color-neon-glow: rgba(0, 255, 204, 0.2);
+      
+      --text-main: #F1F5F9;        /* 밝은 그레이시 화이트 */
+      --text-muted: #94A3B8;       /* 차분한 슬레이트 그레이 */
+      --font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ----------------------------------
+       2. 기본 스타일 리셋 & 공통 레이아웃
+       ---------------------------------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-padding-top: 5rem;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      line-height: 1.6;
+      word-break: keep-all;
+      overflow-x: hidden;
+      padding-top: 5rem; /* 고정 네비게이션 바 높이 확보 */
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      background: none;
+      border: none;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* 스크롤바 디자인 커스텀 */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-main);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1E293B;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--color-primary);
+    }
+
+    /* ----------------------------------
+       3. 네비게이션 필수 스타일링
+       ---------------------------------- */
+    .nav-link {
+      position: relative;
+      display: flex;
+      align-items: center;
+      transition: var(--transition-smooth);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background-color: var(--color-primary);
+      transition: var(--transition-smooth);
+    }
+
+    .nav-link:hover {
+      color: var(--color-primary) !important;
+    }
+
+    .nav-link.active {
+      color: var(--color-primary) !important;
+      font-weight: 700;
+    }
+
+    .nav-link.active::after {
+      width: 100%; /* 활성화 페이지 밑줄 전체 노출 */
+    }
+
+    .mobile-nav-link.active {
+      color: var(--color-primary) !important;
+      border-left: 3px solid var(--color-primary);
+      padding-left: 12px;
+      font-weight: 700;
+    }
+
+    /* ----------------------------------
+       4. 타이틀 및 섹션 개별 효과
+       ---------------------------------- */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    section {
+      padding: 60px 0;
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 32px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+      border-radius: 2px;
+      transition: var(--transition-smooth);
+    }
+
+    section:hover .section-title::after {
+      width: 100%;
+    }
+
+    /* ----------------------------------
+       5. 프로젝트 (Projects) 레이아웃 및 효과
+       ---------------------------------- */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .project-card {
+      background-color: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 40px 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      position: relative;
+    }
+
+    .project-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--color-primary);
+      box-shadow: 0 10px 25px rgba(0, 255, 204, 0.15);
+    }
+
+    .project-icon {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      display: inline-block;
+      transition: var(--transition-smooth);
+    }
+
+    .project-card:hover .project-icon {
+      transform: scale(1.15) rotate(5deg);
+    }
+
+    .project-name {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+    }
+
+    .project-tech-stack {
+      font-size: 0.85rem;
+      color: var(--color-primary);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .project-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      word-break: keep-all;
+    }
+
+    /* ----------------------------------
+       6. 팝업창 (모달, Modal) 스타일
+       ---------------------------------- */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(5, 8, 16, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-window {
+      background-color: var(--bg-card);
+      border: 1px solid rgba(0, 255, 204, 0.2);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 
+                  0 0 30px rgba(0, 255, 204, 0.05);
+      border-radius: 24px;
+      width: 90%;
+      max-width: 550px;
+      padding: 40px;
+      position: relative;
+      transform: scale(0.9) translateY(20px);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      text-align: center;
+    }
+
+    .modal-overlay.active .modal-window {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      transition: var(--transition-smooth);
+    }
+
+    .modal-close:hover {
+      background: rgba(0, 255, 204, 0.2);
+      color: var(--color-primary);
+      transform: rotate(90deg);
+    }
+
+    .modal-emoji {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 16px;
+    }
+
+    .modal-content-text {
+      color: #E2E8F0;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    .modal-deco-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(0, 255, 204, 0.08);
+      border-radius: 30px;
+      font-size: 0.85rem;
+      color: var(--color-primary);
+      font-weight: 600;
+      border: 1px dashed rgba(0, 255, 204, 0.3);
+    }
+
+    @media (max-width: 900px) {
+      .project-grid {
+        grid-template-columns: 1fr; /* 모바일 대응 1열 변환 */
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================== -->
+  <!-- [공통] 상단 하이브리드 네비게이션 바 컴포넌트 (복사용) -->
+  <!-- ======================================================== -->
+  <!-- 현재 페이지인 "Featured Projects" 링크에 active 클래스를 부여했습니다. -->
+  <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300" id="navbar" style="background-color: rgba(10, 15, 29, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+    <div class="container flex justify-between items-center h-16">
+      <!-- 로고 명칭 -->
+      <a href="index.html" class="text-lg font-bold tracking-widest text-white hover:text-[#00FFCC] transition-colors">
+        KIM SO YEONG
+      </a>
+      
+      <!-- 데스크톱 네비게이션 메뉴 (md 이상 노출) -->
+      <ul class="hidden md:flex space-x-8 text-sm font-medium h-full items-center">
+        <li><a href="index.html" class="nav-link text-[#94A3B8] hover:text-[#00FFCC] py-2">Intro</a></li>
+        <li><a href="tech.html" class="nav-link text-[#94A3B8] hover:text-[#00FFCC] py-2">Technical Skills</a></li>
+        <li><a href="hobbies.html" class="nav-link text-[#94A3B8] hover:text-[#00FFCC] py-2">My Hobbies</a></li>
+        <li><a href="projects.html" class="nav-link active text-[#94A3B8] hover:text-[#00FFCC] py-2">Featured Projects</a></li>
+      </ul>
+
+      <!-- 모바일 햄버거 메뉴 토글 버튼 -->
+      <button id="menu-btn" class="md:hidden flex flex-col justify-center items-center w-8 h-8 space-y-1.5 focus:outline-none" aria-label="메뉴 열기">
+        <span class="block w-6 h-0.5 bg-white transition-transform duration-300" id="line1"></span>
+        <span class="block w-6 h-0.5 bg-white transition-opacity duration-300" id="line2"></span>
+        <span class="block w-6 h-0.5 bg-white transition-transform duration-300" id="line3"></span>
+      </button>
+    </div>
+
+    <!-- 모바일 드롭다운 메뉴 (기본값 숨김) -->
+    <div id="mobile-menu" class="hidden md:hidden bg-[#141A2E] border-t border-white/5 transition-all duration-300">
+      <ul class="px-6 py-4 space-y-4 text-sm font-medium">
+        <li><a href="index.html" class="mobile-nav-link block text-[#94A3B8] hover:text-[#00FFCC] py-1">Intro</a></li>
+        <li><a href="tech.html" class="mobile-nav-link block text-[#94A3B8] hover:text-[#00FFCC] py-1">Technical Skills</a></li>
+        <li><a href="hobbies.html" class="mobile-nav-link block text-[#94A3B8] hover:text-[#00FFCC] py-1">My Hobbies</a></li>
+        <li><a href="projects.html" class="mobile-nav-link active block text-[#94A3B8] hover:text-[#00FFCC] py-1">Featured Projects</a></li>
+      </ul>
+    </div>
+  </nav>
+  <!-- ======================================================== -->
+
+  <!-- ======================================================== -->
+  <!-- [본문] 프로젝트 단일 섹션 레이아웃 -->
+  <!-- ======================================================== -->
+  <main class="container">
+    
+    <!-- 프로젝트 섹션 -->
+    <section id="projects">
+      <h2 class="section-title">Featured Projects</h2>
+      <div class="project-grid">
+        
+        <!-- 프로젝트 1 -->
+        <div class="project-card" onclick="openDetailModal('robot_proj')">
+          <div class="project-icon">🤖</div>
+          <h3 class="project-name">Robot Monitoring System</h3>
+          <p class="project-tech-stack">Python / FastAPI / InfluxDB</p>
+          <p class="project-desc">이기종 로봇을 실시간으로 모니터링하는 시스템 (클릭하여 상세 보기)</p>
+        </div>
+
+        <!-- 프로젝트 2 -->
+        <div class="project-card" onclick="openDetailModal('mobility_proj')">
+          <div class="project-icon">🚔</div>
+          <h3 class="project-name">Mobility Team Project</h3>
+          <p class="project-tech-stack">ROS2 / Python</p>
+          <p class="project-desc">센서 융합의 객체 탐지 및 회피 기능을 가지는 자율 주행 차 (클릭하여 상세 보기)</p>
+        </div>
+
+        <!-- 프로젝트 3 -->
+        <div class="project-card" onclick="openDetailModal('adas_proj')">
+          <div class="project-icon">📊</div>
+          <h3 class="project-name">ADAS Project</h3>
+          <p class="project-tech-stack">YOLO</p>
+          <p class="project-desc">KITTI 2D Object Detection Database 기반 객체 탐지 모델 개발 (클릭하여 상세 보기)</p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="container">
+      <p>© 2026 <span class="footer-highlight">KIM SO YEONG</span>. All rights reserved.</p>
+      <p style="font-size: 0.8rem; opacity: 0.5;">Designed with deep navy and radiant emerald mint</p>
+    </div>
+  </footer>
+
+  <!-- ----------------------------------
+       11. 모달 팝업 레이아웃
+       ---------------------------------- -->
+  <div class="modal-overlay" id="hobbyModal" onclick="closeModalOnOverlay(event)">
+    <div class="modal-window">
+      <button class="modal-close" onclick="closeHobbyModal()" aria-label="닫기">✕</button>
+      <div class="modal-emoji" id="modalEmoji">🤖</div>
+      <h3 class="modal-title" id="modalTitle">상세 정보</h3>
+      <p class="modal-content-text" id="modalContent">상세한 내용이 나타나는 공간입니다.</p>
+      <span class="modal-deco-badge" id="modalBadge">Zelda Adventurer</span>
+    </div>
+  </div>
+
+  <!-- ----------------------------------
+       자바스크립트 제어 (인터랙션 및 모바일 메뉴 연동)
+       ---------------------------------- -->
+  <script>
+    /* A. 모바일 햄버거 메뉴 토글 제어 */
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const line1 = document.getElementById('line1');
+    const line2 = document.getElementById('line2');
+    const line3 = document.getElementById('line3');
+
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        line1.classList.toggle('rotate-45');
+        line1.classList.toggle('translate-y-2');
+        line2.classList.toggle('opacity-0');
+        line3.classList.toggle('-rotate-45');
+        line3.classList.toggle('-translate-y-2');
+      });
+    }
+
+    /* B. 프로젝트 카드 상세 팝업 바인딩 데이터셋 */
+    const projectData = {
+      robot_proj: {
+        emoji: '🤖',
+        title: 'Robot Monitoring System',
+        content: "연속적으로 데이터를 전송하는 9개의 이기종 로봇(Robot-arm 3개, UGV 3개, Drone 3개)을 실시간으로 모니터링하는 시스템입니다. 대량의 데이터 트림과 로그를 효율적으로 전처리하고 유연하게 저장 및 조회할 수 있도록 최적의 백엔드 파이프라인을 구축했습니다.",
+        badge: 'Technical Topic: FastAPI & InfluxDB'
+      },
+      mobility_proj: {
+        emoji: '🚔',
+        title: 'Mobility Team Project',
+        content: "센서 융합의 객체 탐지 및 회피 기능을 가지는 자율 주행 차를 시뮬레이션 환경에서 정밀하게 구현한 모빌리티 팀 프로젝트입니다. ROS2 통신 노드 설계를 기반으로 복잡한 주행 로직을 구현하여 시스템의 안정성을 극대화했습니다.",
+        badge: 'Technical Topic: ROS2 & Python'
+      },
+      adas_proj: {
+        emoji: '📊',
+        title: 'ADAS Project',
+        content: "KITTI 2D Object Detection Database 기반 객체 탐지 모델을 개발한 프로젝트입니다. 실시간 카메라 데이터 인풋에 정밀하게 대응하는 가벼우면서도 높은 정확도를 확보한 객체 탐지 모델 가중치 학습을 수행했습니다.",
+        badge: 'Technical Topic: YOLO'
+      }
+    };
+
+    const modal = document.getElementById('hobbyModal');
+    const modalEmoji = document.getElementById('modalEmoji');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalContent = document.getElementById('modalContent');
+    const modalBadge = document.getElementById('modalBadge');
+
+    /* 모달 팝업 열기 */
+    function openDetailModal(key) {
+      const data = projectData[key];
+      if (!data) return;
+
+      modalEmoji.textContent = data.emoji;
+      modalTitle.textContent = data.title;
+      modalContent.textContent = data.content;
+      modalBadge.textContent = data.badge;
+
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    /* 모달 팝업 닫기 */
+    function closeHobbyModal() {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    /* 모달 오버레이 바깥 영역 터치 시 자동 닫힘 제어 */
+    function closeModalOnOverlay(event) {
+      if (event.target === modal) {
+        closeHobbyModal();
+      }
+    }
+  </script>
+</body>
+</html>
